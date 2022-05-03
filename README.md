@@ -1,6 +1,6 @@
 # The Witch's Cottage
 
-The Witch's Cottage is an interactive LI game made using react.
+The Witch's Cottage is an IF (Interactive Fiction) game made using react.
 
 ## Visuals
 
