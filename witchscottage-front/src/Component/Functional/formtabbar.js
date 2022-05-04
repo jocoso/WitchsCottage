@@ -27,15 +27,15 @@ function FormTabBar({ tabs, style }) {
                             {tab.inputs.map(
                                 (input, idx) => {
                                     return(
-                                        <Form.Group key={idx} className="mb-3" controlId={input.id} >
+                                        <Form.Group key={idx} controlId={input.id} >
                                             <Form.Label>{input.label}</Form.Label>
-                                            <Form.Control type={input.type} />
+                                            <Form.Control type={input.type} name={input.name} onChange={input.onChange} value={input.value} />
                                         </Form.Group>
                                     )
                                 }
                             )}
 
-                            <Button variant="primary" type="submit">
+                            <Button variant="primary" type="submit" onClick={tab.onSubmit} >
                                 {tab.submitLabel}
                             </Button>
                         </Form>
@@ -62,7 +62,8 @@ FormTabBar.propTypes = {
                         name: PropTypes.string,
                         type: PropTypes.string.isRequired,
                         label: PropTypes.string.isRequired,
-                        onChange: PropTypes.string
+                        value: PropTypes.string,
+                        onChange: PropTypes.func.isRequired
                     })
                 ).isRequired,
                 submitLabel: PropTypes.string.isRequired,
