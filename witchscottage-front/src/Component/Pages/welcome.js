@@ -19,6 +19,9 @@ import Background from "../../image/witchBackground.jpg";
 // Components
 
 
+// GLOBAL
+const API_URL = 'http://localhost:9999';
+
 class WelcomePage extends React.Component {
     
     constructor(props) {
@@ -125,21 +128,40 @@ class WelcomePage extends React.Component {
         if(name in data) {
             data[name] = value;
         } 
-
-        console.log(data);
         this.setState({data});
 
     }
 
     onSubmitHandlerLogin = (event) => {
         event.preventDefault();
-        console.log("Login button clicked");
     }
 
     
     onSubmitHandlerSignup = (event) => {
         event.preventDefault();
-        console.log("Signup button clicked");
+        
+        const { signupEmail, signupPassword, username } = this.state.data;
+
+        fetch(API_URL + '/register', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: signupEmail,
+                password: signupPassword,
+                username
+            })
+        })
+        .then((response) => {
+            console.log(response);
+            response.json();
+        }).then((json) => {
+            console.log(json);
+        }).catch(err => {
+            console.log(err);
+        });
     }
 
     getNameData = (name) => {

@@ -29,7 +29,11 @@ function FormTabBar({ tabs, style }) {
                                     return(
                                         <Form.Group key={idx} controlId={input.id} >
                                             <Form.Label>{input.label}</Form.Label>
-                                            <Form.Control type={input.type} name={input.name} onChange={input.onChange} value={input.value} />
+                                            <Form.Control 
+                                                type={input.type} 
+                                                name={input.name} 
+                                                onChange={input.onChange} 
+                                                value={input.value} />
                                         </Form.Group>
                                     )
                                 }
