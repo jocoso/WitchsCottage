@@ -37,12 +37,13 @@ app.use(cors());
 
 // CREATE USER
 app.post("/register", 
+
     // Data validation
     body('username').isLength({min: 5, max: 20}),
-    body('email').isEmail().normalizeEmail(),
-    body('password').isLength({ min: 8, max: 50 })
+    body('email').isEmail(),
+    body('password').isLength({ min: 5, max: 50 }),
 
-    ,async(req, res) => {
+    async(req, res) => {
 
     const errors = validationResult(req);
 
@@ -69,20 +70,19 @@ app.post("/register",
 
         await connection.query(search_query, async(err, result) => {
             if(err) throw(err)
-            console.log("--------> Search Results");
+            // Search Results
             console.log(result.length);
 
             if(result.length != 0) {
                 connection.release();
-                console.log("-------> User already exists");
+                // User already exists
                 res.sendStatus(409);
             } else {
                 await connection.query(insert_query, (err, result) => {
                     connection.release();
 
                     if(err) throw (err)
-                    console.log("---------> Created new User");
-                    console.log(result.insertId);
+                    // Created new user
                     res.sendStatus(201);
                 })
             }
@@ -124,21 +124,22 @@ app.post("/login", (req, res) => {
             if(err) throw (err)
 
             if(result.length == 0) {
-                console.log("-------> User does not exist");
+                // User does not exists
                 res.sendStatus(404);
             } else {
                 const hashedPassword = result[0].password;
 
                 if(await bcrypt.compare(password, hashedPassword).catch(err => {console.log(err)})) {
-                    console.log("--------> Login Successful");
-                    console.log("----------> Generating accessToken");
+                    // Login Successful
+                    // Generating accessToken
                     const accessToken = generateAccessToken({email: email});
                     const refreshToken = generateRefreshToken({user: req.body.email});
                     refreshTokens.push(refreshToken);
 
-                    res.json({accessToken: accessToken, refreshToken: refreshToken, tokens: refreshTokens }).catch(err => {console.log(err)});
+                    res.json({accessToken: accessToken, refreshToken: refreshToken, tokens: refreshTokens, username: result[0].username }).catch(err => {console.log(err)});
+
                 } else {
-                    console.log("--------------> Password Incorrect");
+                    // Incorrect Password
                     res.status(401).send("Password Incorrect").catch(err=>console.log(err));
                 }
             }
